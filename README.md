@@ -20,7 +20,16 @@ The Idaho Mashers' data tells a deliberate business story:
 
 ## Project Phases
 - [x] **Phase 1:** Foundation & seed data generator
-- [ ] Phase 2: Bronze → Silver DLT pipeline
+- [x] **Phase 2:** Bronze → Silver Lakeflow declarative pipeline
 - [ ] Phase 3: Gold layer & orchestration
 - [ ] Phase 4: ML — segmentation & churn
-- [ ] Phase 5: Dashboards & portfolio polish# icebase
+- [ ] Phase 5: Dashboards & portfolio polish
+
+## Silver Layer Schema
+| Table | Type | Source | Key Additions |
+|---|---|---|---|
+| `dim_game` | Materialized View | bronze.raw_events | result_numeric, is_playoff_relevant, wins_to_date |
+| `dim_customer` | Streaming Table | raw_customers + stream | INITCAP name clean, tenure_days, record_source |
+| `fact_tickets` | Streaming Table | raw_tickets + stream | seat_tier_rank, days_before_game, is_advance_purchase |
+| `bridge_promo` | Materialized View | bronze.raw_promotions | promo_impact_score, discount_tier |
+| `quarantine_tickets` | Streaming Table | Volume landing zone | Routes bad records — null IDs, zero prices |
