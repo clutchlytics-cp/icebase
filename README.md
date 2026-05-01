@@ -18,12 +18,13 @@ The Idaho Mashers' data tells a deliberate business story:
 - 🟡 **Late Push (Games 53–72):** Recovery, but promo-conditioned fans resist
 - 🟣 **Jersey Night (Game 77):** Mack Tateson #14 retired — sellout, 412 new fans
 
-## Project Phases
-- [x] **Phase 1:** Foundation & seed data generator
-- [x] **Phase 2:** Bronze → Silver Lakeflow declarative pipeline
-- [ ] Phase 3: Gold layer & orchestration
-- [ ] Phase 4: ML — segmentation & churn
+ ## Project Phases
+- [x] Phase 1: Foundation & seed data generator
+- [x] Phase 2: Bronze → Silver Lakeflow declarative pipeline
+- [x] Phase 3: Gold layer, Lakeflow Jobs orchestration
+- [ ] Phase 4: ML — fan segmentation & churn prediction
 - [ ] Phase 5: Dashboards & portfolio polish
+
 
 ## Silver Layer Schema
 | Table | Type | Source | Key Additions |
@@ -33,3 +34,14 @@ The Idaho Mashers' data tells a deliberate business story:
 | `fact_tickets` | Streaming Table | raw_tickets + stream | seat_tier_rank, days_before_game, is_advance_purchase |
 | `bridge_promo` | Materialized View | bronze.raw_promotions | promo_impact_score, discount_tier |
 | `quarantine_tickets` | Streaming Table | Volume landing zone | Routes bad records — null IDs, zero prices |
+
+## Gold Layer Schema
+| Table | Rows | Key Columns | Powers |
+|---|---|---|---|
+| `customer_360` | ~5,400 | total_spend, promo_sensitivity, churn_flag, revenue_net | ML models, Fan Health Dashboard |
+| `game_revenue` | 82 | gross_revenue, net_revenue, fill_rate, revenue_index | Revenue Ops Dashboard |
+| `retention_cohort` | ~5,400 | churn_flag, returned_30d, days_since_last, is_jersey_night_cohort | Churn model training data |
+
+## Orchestration
+Lakeflow Job: `icebase-orchestrator` — runs every 30 minutes
+Task DAG: Silver Pipeline → [customer_360 ∥ game_revenue] → retention_cohort
