@@ -18,12 +18,13 @@ The Idaho Mashers' data tells a deliberate business story:
 - 🟡 **Late Push (Games 53–72):** Recovery, but promo-conditioned fans resist
 - 🟣 **Jersey Night (Game 77):** Mack Tateson #14 retired — sellout, 412 new fans
 
- ## Project Phases
+## Project Phases
 - [x] Phase 1: Foundation & seed data generator
 - [x] Phase 2: Bronze → Silver Lakeflow declarative pipeline
 - [x] Phase 3: Gold layer, Lakeflow Jobs orchestration
-- [ ] Phase 4: ML — fan segmentation & churn prediction
-- [ ] Phase 5: Dashboards & portfolio polish
+- [x] Phase 4: ML — fan segmentation & churn prediction
+- [ ] Phase 5: Databricks SQL Dashboards
+- [ ] Phase 6: SQL Alerts & monitoring capstone
 
 
 ## Silver Layer Schema
@@ -45,3 +46,15 @@ The Idaho Mashers' data tells a deliberate business story:
 ## Orchestration
 Lakeflow Job: `icebase-orchestrator` — runs every 30 minutes
 Task DAG: Silver Pipeline → [customer_360 ∥ game_revenue] → retention_cohort
+
+## Machine Learning Layer
+| Model | Type | Algorithm | Output Table | Registry |
+|---|---|---|---|---|
+| Fan Segmentation | Unsupervised | K-Means (k=5) | `ml_fan_segments` | `icebase.gold.kmeans_fan_segmentation` |
+| Churn Prediction | Supervised | XGBoost | `ml_churn_scores` | `icebase.gold.xgboost_churn_predictor` |
+
+**Fan Segments:** Season Core · High Value New · Casual Fan · Promo Hunter · Lapsed
+**Churn Risk Tiers:** High (≥0.70) · Medium (0.40–0.70) · Low (<0.40)
+**MLflow Tracking:** Full experiment logging — parameters, AUC, confusion matrix, feature importance
+**Feature Lineage:** Tracked via Databricks Feature Engineering in Unity Catalog
+
