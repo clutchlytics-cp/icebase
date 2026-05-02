@@ -23,7 +23,7 @@ The Idaho Mashers' data tells a deliberate business story:
 - [x] Phase 2: Bronze → Silver Lakeflow declarative pipeline
 - [x] Phase 3: Gold layer, Lakeflow Jobs orchestration
 - [x] Phase 4: ML — fan segmentation & churn prediction
-- [ ] Phase 5: Databricks SQL Dashboards
+- [x] Phase 5: AI/BI Dashboards — branded, business-ready
 - [ ] Phase 6: SQL Alerts & monitoring capstone
 
 
@@ -57,4 +57,15 @@ Task DAG: Silver Pipeline → [customer_360 ∥ game_revenue] → retention_coho
 **Churn Risk Tiers:** High (≥0.70) · Medium (0.40–0.70) · Low (<0.40)
 **MLflow Tracking:** Full experiment logging — parameters, AUC, confusion matrix, feature importance
 **Feature Lineage:** Tracked via Databricks Feature Engineering in Unity Catalog
+
+## Dashboards
+Three AI/BI dashboards built on Databricks SQL, branded with the Idaho Mashers identity:
+
+| Dashboard | Audience | Key Visuals |
+|---|---|---|
+| **Fan Health** | CMO, Retention | Churn risk distribution, high-risk watchlist, Jersey Night cohort |
+| **Revenue Operations** | VP Revenue, Finance | Season revenue arc, fill rate trend, promo impact by phase |
+| **Segment Explorer** | Marketing | Segment profiles, channel quality, campaign action guide |
+
+*All dashboards read from Gold and ML output tables, refreshed automatically by the Lakeflow Job.*
 
